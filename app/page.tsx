@@ -1,95 +1,74 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Image from "next/image";
+import styled from "styled-components";
+import {
+  useTransition,
+  useDeferredValue,
+  useState,
+  useEffect,
+  Suspense,
+} from "react";
 
 export default function Home() {
+  const [isPending, startTransition] = useTransition();
+  const [value, setValue] = useState<string>("");
+
+  const [list, setList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const arr = Array.from({ length: 30 }, (v, i) => i).map((d) => d);
+
+    value === ""
+      ? setList(arr)
+      : setList(arr.filter((l) => l.toString().includes(value)));
+  }, [value]);
+
+  const onChangeInput = (e: any) => {
+    const v = e.target.value;
+    setValue(v);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="home">
+      <input onChange={onChangeInput} />
+      {isPending && "로딩중.."}
+      {/* <div
+        style={{
+          width: 100,
+          height: 100,
+          backgroundColor: isPending ? "red" : "aqua ",
+        }}
+      ></div> */}
+
+      {list.map((d, i) => (
+        <div
+          style={{ border: "1px black solid", marginBottom: 10, padding: 10 }}
+          key={i}
+        >
+          {d}
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      ))}
+      {/* <div>
+        {[
+          "https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
+          "https://blog.kakaocdn.net/dn/YsYS3/btqCUcjAZ7r/m5X0e1aFeQfijCZ6ybLQE1/img.jpg",
+          "https://blog.kakaocdn.net/dn/b5uTtj/btqCVDHxETv/roiutUKr6ynFW8RfVMS8NK/img.jpg",
+          "https://blog.kakaocdn.net/dn/bSUrHp/btqCVEl74jO/fRQQHAAm7kSOxoN4QGDvV0/img.jpg",
+          "https://blog.kakaocdn.net/dn/ckVyhP/btqCUx8S0Zr/ZL7wLO5ht5WyyURJ6Fbt2k/img.jpg",
+        ].map((url, id) => (
+          <div.img key={id}>
+            <Image
+              src={url}
+              width={500}
+              height={500}
+              quality={10}
+              style={{ objectFit: "cover" }}
+              alt="카카오"
+              blurDataURL="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Fblur&psig=AOvVaw3wq2miXMVarnNJGXBbBw9R&ust=1687503613662000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCPjfkv2m1v8CFQAAAAAdAAAAABAE"
+            />
+          </div.img>
+        ))}
+      </div> */}
+    </div>
+  );
 }
